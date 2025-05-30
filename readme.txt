@@ -1,6 +1,6 @@
 # API-JSON
 
-A simple CLI tool that fetches data from the ISRO API and displays structured results.
+A simple single-page web tool that fetches data from the ISRO API and displays structured results.
 
 ## Features
 - Fetches customer satellite data from ISRO's public API.
@@ -34,8 +34,6 @@ This will fetch the data from ISRO's API and display the structured output.
 Data is fetched from:
 [https://isro.vercel.app/api/customer_satellites](https://isro.vercel.app/api/customer_satellites)
 
-## Contributing
-Feel free to fork the repository and submit pull requests.
 
 ## License
 This project is open-source and available under the MIT License.
