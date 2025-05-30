@@ -2,8 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
+	"log"
 	"net/http"
 )
 
@@ -28,32 +28,36 @@ type customer_satellites struct {
 	Launcher    string `json:"launcher"`
 }
 
-func main() {
+func satelliteHandler(w http.ResponseWriter, r *http.Request) {
 	var result APIOutput
 	url := "https://isro.vercel.app/api/customer_satellites"
-	rawData, err := http.Get(url)
+	rawdata, err := http.Get(url)
 	if err != nil {
-		fmt.Println("Error occured while loading api")
+		http.Error(w, "Failed to fetch data", http.StatusInternalServerError)
 		return
 	}
-	defer rawData.Body.Close()
-	body, err := io.ReadAll(rawData.Body)
+	defer rawdata.Body.Close()
+
+	body, err := io.ReadAll(rawdata.Body)
 	if err != nil {
-		fmt.Println("Error occured while loading data")
+		http.Error(w, "Failed to Read File", http.StatusInternalServerError)
 		return
 	}
-	err = json.Unmarshal(body, &result)
-	if err != nil {
-		fmt.Println("Error occured while decording json")
+	if err := json.Unmarshal(body, &result); err != nil {
+		http.Error(w, "failed to decode json", http.StatusInternalServerError)
 		return
-	}
-	// fmt.Println(result.CustomerSatellite)
-	for _, individualData := range result.CustomerSatellite {
-		fmt.Println("----------------------")
-		fmt.Println("ID:", individualData.Id)
-		fmt.Println("Country:", individualData.Country)
-		fmt.Println("Launch Date:", individualData.Launch_date)
-		fmt.Println("Mission Type:", individualData.Launcher)
 	}
 
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(result.CustomerSatellite)
+
+}
+
+func main() {
+	http.HandleFunc("/data", satelliteHandler)
+
+	fs := http.FileServer(http.Dir("Statics"))
+	http.Handle("/", fs)
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
