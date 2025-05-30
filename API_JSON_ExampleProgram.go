@@ -59,5 +59,5 @@ func main() {
 	fs := http.FileServer(http.Dir("Statics"))
 	http.Handle("/", fs)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8082", nil))
 }
