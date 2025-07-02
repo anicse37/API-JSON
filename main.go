@@ -14,7 +14,7 @@ import (
 *
 * Toconvert the file it uses Unmarshal function in "encoding/json" package
 *
-* Also, Data canbe accessed individually using structure
+* Also, Data can be accessed individually using structure
 *
  */
 
@@ -59,5 +59,5 @@ func main() {
 	fs := http.FileServer(http.Dir("Statics"))
 	http.Handle("/", fs)
 
-	log.Fatal(http.ListenAndServe(":8082", nil))
+	log.Fatal(http.ListenAndServe(":9090", nil))
 }
